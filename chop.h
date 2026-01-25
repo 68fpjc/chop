@@ -4,4 +4,4 @@
  * @param width 幅
  * @return 実際に出力した幅
  */
-int chop(const char *s, const int width);
+int chop(const char* s, const int width);
