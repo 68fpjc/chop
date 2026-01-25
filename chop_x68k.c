@@ -68,7 +68,7 @@ int chop(const char* s, const int width) {
       if (!c2) {
         break;  // Prevent reading beyond the string
       }
-      if ((c == 0x80) || ((c >= 0xf0) && (c <= 0xff))) {
+      if ((c == 0x80) || (c >= 0xf0)) {
         current_width += process_two_bytes_hankaku(c, c2);
       } else {
         if (current_width + 2 > width) {

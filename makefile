@@ -13,7 +13,7 @@ AS = $(CROSS)as
 LD = $(CROSS)gcc
 
 # コンパイルオプション
-CFLAGS_COMMON = -m68000 -funsigned-char -Wall -MMD -D_GNU_SOURCE -DPROGRAM=\"$(PROGRAM)\" -DVERSION=\"$(VERSION)\"
+CFLAGS_COMMON = -m68000 -funsigned-char -Wall -Wextra -MMD -D_GNU_SOURCE -DPROGRAM=\"$(PROGRAM)\" -DVERSION=\"$(VERSION)\"
 ifdef RELEASE_BUILD
   CFLAGS = $(CFLAGS_COMMON) -O3  # リリースビルド
 else
