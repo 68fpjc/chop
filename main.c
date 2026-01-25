@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
         print_help();
         return 0;
       case 'v':
-        printf(PROGRAM " " VERSION "\n");
+        printf(PROGRAM " " VERSION " https://github.com/68fpjc/chop\n");
         return 0;
       case 'w':
         errno = 0;
