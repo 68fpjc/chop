@@ -52,17 +52,15 @@ int chop(const char* s, const int width) {
     if (current_width >= width) {
       break;
     }
-    if ((c < 0x80) || ((c >= 0xA0) && (c <= 0xDF))) {
-      if (c == '\t') {
-        int spaces = 8 - (current_width % 8);
-        if (current_width + spaces > width) {
-          break;  // Not enough space for tab expansion
-        }
-        putchar(c);
-        current_width += spaces;
-      } else {
-        current_width += process_hankaku(c);
+    if (c == '\t') {
+      int spaces = 8 - (current_width % 8);
+      if (current_width + spaces > width) {
+        break;  // Not enough space for tab expansion
       }
+      putchar(c);
+      current_width += spaces;
+    } else if ((c < 0x80) || ((c >= 0xA0) && (c <= 0xDF))) {
+      current_width += process_hankaku(c);
     } else {
       unsigned char c2 = (unsigned char)*s++;
       if (!c2) {
@@ -78,7 +76,13 @@ int chop(const char* s, const int width) {
       }
     }
   }
-  //   printf("\nTotal width: %d\n", current_width);
+  //   {
+  //     putchar('\n');
+  //     for (int i = 0; i < width; i++) {
+  //       putchar("1234567890"[i % 10]);
+  //     }
+  //     putchar('\n');
+  //   }
 
   return current_width;
 }
