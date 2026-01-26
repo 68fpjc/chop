@@ -7,7 +7,7 @@
  * @param c 文字
  * @return 出力した幅
  */
-static int process_hankaku(const char c) {
+static int process_hankaku(const unsigned char c) {
   int ret = 0;
   if (c < 0x20 || c == 0x7F) {
     // Control characters are not printed
@@ -25,7 +25,7 @@ static int process_hankaku(const char c) {
  * @param c2 2 バイト目
  * @return 出力した幅
  */
-static int process_zenkaku(const char c1, const char c2) {
+static int process_zenkaku(const unsigned char c1, const unsigned char c2) {
   // For simplicity, just print the two bytes representing the Zenkaku character
   putchar(c1);
   putchar(c2);
@@ -38,7 +38,8 @@ static int process_zenkaku(const char c1, const char c2) {
  * @param c2 2 バイト目
  * @return 出力した幅
  */
-static int process_two_bytes_hankaku(const char c1, const char c2) {
+static int process_two_bytes_hankaku(const unsigned char c1,
+                                     const unsigned char c2) {
   putchar(c1);
   putchar(c2);
   return 1;  // Treat as hankaku width of 1
@@ -46,8 +47,8 @@ static int process_two_bytes_hankaku(const char c1, const char c2) {
 
 int chop(const char* s, const int width) {
   int current_width = 0;
-  char c;
-  while ((c = *s) != '\0') {
+  unsigned char c;
+  while ((c = (unsigned char)*s++) != '\0') {
     if (current_width >= width) {
       break;
     }
@@ -62,9 +63,8 @@ int chop(const char* s, const int width) {
       } else {
         current_width += process_hankaku(c);
       }
-      s++;
     } else {
-      int c2 = *(s + 1);
+      unsigned char c2 = (unsigned char)*s++;
       if (!c2) {
         break;  // Prevent reading beyond the string
       }
@@ -76,7 +76,6 @@ int chop(const char* s, const int width) {
         }
         current_width += process_zenkaku(c, c2);
       }
-      s += 2;
     }
   }
   //   printf("\nTotal width: %d\n", current_width);
