@@ -50,7 +50,7 @@ static int process_input(FILE* input, int width) {
       // EOF またはエラー
       if (len > 0) {
         // 最後に読み込んだ行を処理
-        chop(line, width);
+        chop(line, 0, width);
         printf("\n");
       }
       break;
@@ -61,7 +61,7 @@ static int process_input(FILE* input, int width) {
     // 改行が見つかった場合
     if (len > 0 && line[len - 1] == '\n') {
       line[len - 1] = '\0';
-      chop(line, width);
+      chop(line, 0, width);
       printf("\n");
       len = 0;
     } else if (len >= capacity - 1) {

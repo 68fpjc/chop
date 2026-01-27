@@ -45,11 +45,12 @@ static int process_two_bytes_hankaku(const unsigned char c1,
   return 1;  // Treat as hankaku width of 1
 }
 
-int chop(const char* s, const int width) {
+int chop(const char* s, const int col, const int width) {
   int current_width = 0;
+  int effective_width = width - col;
   unsigned char c;
   while ((c = (unsigned char)*s++) != '\0') {
-    if (current_width >= width) {
+    if (current_width >= effective_width) {
       break;
     }
     if (c == '\t') {
@@ -78,7 +79,7 @@ int chop(const char* s, const int width) {
   }
   //   {
   //     putchar('\n');
-  //     for (int i = 0; i < width; i++) {
+  //     for (int i = 0; i < effective_width; i++) {
   //       putchar("1234567890"[i % 10]);
   //     }
   //     putchar('\n');
