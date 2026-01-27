@@ -28,6 +28,14 @@ static void print_help_info(void) {
 }
 
 /**
+ * @brief 標準出力への出力関数ラッパー
+ */
+static void stdout_output(int c, chop_output_context* ctx) {
+  (void)ctx;  // 標準出力の場合は ctx は使用しない
+  putchar(c);
+}
+
+/**
  * @brief Processes input from a file or stdin line by line.
  * @param input Input file stream
  * @param width Width for chop processing
@@ -50,7 +58,8 @@ static int process_input(FILE* input, int width) {
       // EOF またはエラー
       if (len > 0) {
         // 最後に読み込んだ行を処理
-        chop(line, 0, width);
+        chop_output_context ctx = {stdout_output, NULL};
+        chop(line, 0, width, &ctx);
         printf("\n");
       }
       break;
@@ -61,7 +70,8 @@ static int process_input(FILE* input, int width) {
     // 改行が見つかった場合
     if (len > 0 && line[len - 1] == '\n') {
       line[len - 1] = '\0';
-      chop(line, 0, width);
+      chop_output_context ctx = {stdout_output, NULL};
+      chop(line, 0, width, &ctx);
       printf("\n");
       len = 0;
     } else if (len >= capacity - 1) {
