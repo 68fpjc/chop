@@ -1,54 +1,7 @@
 #include <stdio.h>
 
 #include "chop.h"
-
-/**
- * @brief 半角文字の処理
- * @param c 文字
- * @param ctx 出力コンテキスト
- * @return 出力した幅
- */
-static int process_hankaku(const unsigned char c, chop_output_context* ctx) {
-  int ret = 0;
-  if (c < 0x20 || c == 0x7F) {
-    // Control characters are not printed
-  } else {
-    // Print ASCII character
-    ctx->output_func(c, ctx);
-    ret = 1;
-  }
-  return ret;
-}
-
-/**
- * @brief 全角文字の処理
- * @param c1 1 バイト目
- * @param c2 2 バイト目
- * @param ctx 出力コンテキスト
- * @return 出力した幅
- */
-static int process_zenkaku(const unsigned char c1, const unsigned char c2,
-                           chop_output_context* ctx) {
-  // For simplicity, just print the two bytes representing the Zenkaku character
-  ctx->output_func(c1, ctx);
-  ctx->output_func(c2, ctx);
-  return 2;  // Zenkaku characters occupy width of 2
-}
-
-/**
- * @brief 2 バイト半角文字の処理
- * @param c1 1 バイト目
- * @param c2 2 バイト目
- * @param ctx 出力コンテキスト
- * @return 出力した幅
- */
-static int process_two_bytes_hankaku(const unsigned char c1,
-                                     const unsigned char c2,
-                                     chop_output_context* ctx) {
-  ctx->output_func(c1, ctx);
-  ctx->output_func(c2, ctx);
-  return 1;  // Treat as hankaku width of 1
-}
+#include "x68kcon/x68kcon.h"
 
 int chop(const char* s, const int col, const int width,
          chop_output_context* ctx) {
@@ -68,20 +21,28 @@ int chop(const char* s, const int col, const int width,
       }
       ctx->output_func(c, ctx);
       current_width += spaces;
-    } else if ((c < 0x80) || ((c >= 0xA0) && (c <= 0xDF))) {
-      current_width += process_hankaku(c, ctx);
     } else {
-      unsigned char c2 = (unsigned char)*s_tmp++;
-      if (!c2) {
-        break;  // Prevent reading beyond the string
-      }
-      if ((c == 0x80) || (c >= 0xf0)) {
-        current_width += process_two_bytes_hankaku(c, c2, ctx);
+      int width_diff;
+      unsigned char c2;
+      if (!ismbblead_x68k(c)) {
+        c2 = c;
+        c = 0;
       } else {
-        if (current_width + 2 > width) {
-          break;  // Not enough space for a zenkaku character
+        c2 = (unsigned char)*s_tmp++;
+      }
+      width_diff = char_width_x68k(c, c2);
+      if (width_diff == -1) {
+        break;  // Invalid character, stop processing
+      }
+      current_width += width_diff;
+      if (current_width > width) {
+        break;  // Not enough space for this character
+      }
+      if (width_diff) {
+        if (c) {
+          ctx->output_func(c, ctx);
         }
-        current_width += process_zenkaku(c, c2, ctx);
+        ctx->output_func(c2, ctx);
       }
     }
   }

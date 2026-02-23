@@ -34,12 +34,18 @@ all: $(TARGET)
 $(TARGET): $(OBJS)
 	$(LD) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
+x68kcon/x68kcon.h:
+	wget -q -P x68kcon/ https://raw.githubusercontent.com/68fpjc/x68kcon/b36f957831ada16ef9aff6fd1656004f8a70ff7a/x68kcon.h
+
+chop_x68k.o: x68kcon/x68kcon.h
+
 # 依存関係ファイルの取り込み
 -include $(DEPS)
 
 # 中間ファイルの削除
 clean:
 	-rm -f *.x *.o *.elf* *.d
+	-rm -rf x68kcon/*
 
 # 配布ディレクトリを含めた完全クリーン
 veryclean: clean
