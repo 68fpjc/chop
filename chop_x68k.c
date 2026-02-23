@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: 0BSD */
+
 #include <stdio.h>
 
 #include "chop.h"

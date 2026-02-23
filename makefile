@@ -57,8 +57,9 @@ release:
 	$(MAKE) RELEASE_BUILD=yes
 	mkdir -p $(DISTDIR)
 	mv $(TARGET) $(DISTDIR)
+	cp LICENSE $(DISTDIR)
 	pandoc -f markdown -t plain README.md | iconv -t cp932 >$(DISTDIR)/README.txt
-	cd $(DISTDIR) && 7z a $(ARCHIVE) $(TARGET) README.txt
+	cd $(DISTDIR) && 7z a $(ARCHIVE) $(TARGET) LICENSE README.txt
 	$(MAKE) clean
 
 # バージョン番号の更新

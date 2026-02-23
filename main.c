@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: 0BSD */
+
 #include <errno.h>
 #include <getopt.h>
 #include <stdio.h>

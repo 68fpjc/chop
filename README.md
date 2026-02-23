@@ -43,6 +43,10 @@ chop --width 64 input.txt
 
 X68000 ではビルドできません。 [elf2x68k](https://github.com/yunkya2/elf2x68k) が必要です。 makefile のあるディレクトリで `make` してください。
 
+## ライセンス
+
+0BSD ライセンスです。詳細は [LICENSE](LICENSE) を参照してください。
+
 ## 連絡先
 
 https://github.com/68fpjc/chop
