@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "chop.h"
 
@@ -141,11 +142,15 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
-  FILE* input = stdin;
-  const char* filename = NULL;
+  // dup() して stdin を閉じる
+  // (Human68k 対策。他の環境では動作未確認)
+  FILE* input = fdopen(dup(fileno(stdin)), "r");
+  fclose(stdin);
+  int is_stdin = 1;
 
   // ファイル名が指定されている場合
   if (optind < argc) {
+    const char* filename = NULL;
     filename = argv[optind];
     // "-" の場合は stdin を使用
     if (filename[0] != '-' || filename[1] != '\0') {
@@ -155,12 +160,13 @@ int main(int argc, char* argv[]) {
         return 1;
       }
     }
+    is_stdin = 0;
   }
 
   int result = process_input(input, width);
 
   // ファイルを開いた場合はクローズ
-  if (input != stdin) {
+  if (!is_stdin) {
     fclose(input);
   }
 
