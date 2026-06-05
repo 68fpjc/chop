@@ -19,7 +19,7 @@ ifdef RELEASE_BUILD
 else
   CFLAGS = $(CFLAGS_COMMON) -O0 -g  # 開発ビルド : デバッグ情報付き
 endif
-LDFLAGS =
+LDFLAGS = -specs=hupair.specs
 OBJS = main.o chop_x68k.o  # コンパイル対象のオブジェクトファイル
 LDLIBS =
 DEPS = $(patsubst %.o,%.d,$(OBJS))
