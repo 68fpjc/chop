@@ -18,7 +18,7 @@ If FILE is omitted or '-', read from standard input.
   -v, --version  output version information and exit
 ```
 
-- `-w` または `--width` で桁数 (半角換算) を指定します (デフォルト : 96)
+-   `-w` または `--width` で桁数 (半角換算) を指定します (デフォルト : 96)
 
 ## 使用例
 
@@ -41,7 +41,7 @@ chop --width 64 input.txt
 
 ## ソースコードからのビルド
 
-X68000 ではビルドできません。 [elf2x68k](https://github.com/yunkya2/elf2x68k) が必要です。 makefile のあるディレクトリで `make` してください。
+X68000 ではビルドできません。[elf2x68k](https://github.com/yunkya2/elf2x68k) が必要です。 makefile のあるディレクトリで `make` してください。
 
 ## ライセンス
 

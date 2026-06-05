@@ -1,9 +1,9 @@
 /* SPDX-License-Identifier: 0BSD */
 
 #include <stdio.h>
+#include <x68kcon.h>
 
 #include "chop.h"
-#include "x68kcon/x68kcon.h"
 
 int chop(const char* s, const int col, const int width,
          chop_output_context* ctx) {

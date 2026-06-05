@@ -13,7 +13,7 @@ AS = $(CROSS)as
 LD = $(CROSS)gcc
 
 # コンパイルオプション
-CFLAGS_COMMON = -m68000 -Wall -Wextra -MMD -D_GNU_SOURCE -DPROGRAM=\"$(PROGRAM)\" -DVERSION=\"$(VERSION)\"
+CFLAGS_COMMON = -m68000 -Wall -Wextra -MMD -D_GNU_SOURCE -DPROGRAM=\"$(PROGRAM)\" -DVERSION=\"$(VERSION)\" -I x68kcon
 ifdef RELEASE_BUILD
   CFLAGS = $(CFLAGS_COMMON) -O3  # リリースビルド
 else
@@ -25,10 +25,10 @@ LDLIBS =
 DEPS = $(patsubst %.o,%.d,$(OBJS))
 
 # ターゲット定義
-.PHONY: all clean veryclean release bump-version
+.PHONY: all extra_headers clean veryclean release bump-version
 
 # デフォルトターゲット : 実行ファイルのビルド
-all: $(TARGET)
+all: extra_headers $(TARGET)
 
 # 実行ファイルのリンク
 $(TARGET): $(OBJS)
@@ -37,10 +37,10 @@ $(TARGET): $(OBJS)
 x68kcon/x68kcon.h:
 	wget -q -P x68kcon/ https://raw.githubusercontent.com/68fpjc/x68kcon/b36f957831ada16ef9aff6fd1656004f8a70ff7a/x68kcon.h
 
-chop_x68k.o: x68kcon/x68kcon.h
-
 # 依存関係ファイルの取り込み
 -include $(DEPS)
+
+extra_headers: x68kcon/x68kcon.h
 
 # 中間ファイルの削除
 clean:
